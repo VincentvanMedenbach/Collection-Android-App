@@ -3,9 +3,14 @@ package autiboiz.collectiontestapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -29,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.support.v4.app.DialogFragment;
 
 import org.json.JSONObject;
 
@@ -330,9 +336,9 @@ public class LoginActivity extends AppCompatActivity {
                     conn.setDoInput(true);
 
                     JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("name", name);
-                    jsonParam.put("email", email);
-                    jsonParam.put("password", password);
+                    jsonParam.put("userName", name);
+                    jsonParam.put("userEmail", email);
+                    jsonParam.put("userPassword", password);
 
                     Log.i("JSON", jsonParam.toString());
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
@@ -373,8 +379,8 @@ public class LoginActivity extends AppCompatActivity {
                     conn.setDoInput(true);
 
                     JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("email", email);
-                    jsonParam.put("password", password);
+                    jsonParam.put("userEmail", email);
+                    jsonParam.put("userPassword", password);
 
                     Log.i("JSON", jsonParam.toString());
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
@@ -386,7 +392,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                     Log.i("MSG" , conn.getResponseMessage());
+                    if(conn.getResponseMessage() == "OK" ){
 
+
+                        Object loginDialog = new DialogPopup();
+                        ((DialogPopup) loginDialog).show(getSupportFragmentManager(), "Test");
+                    }
                     conn.disconnect();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -400,4 +411,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 }
+
+
 

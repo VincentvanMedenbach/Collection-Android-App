@@ -15,4 +15,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="dialogButton">Continue</string>
+    <string name="dialogContents">login succesfull!</string>
 </resources>
