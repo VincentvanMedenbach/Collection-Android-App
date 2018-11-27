@@ -5,7 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 public class MainPage extends AppCompatActivity {
 
     protected void onCreate() {
-         setContentView(R.layout.activity_mainpage);
+        setTheme(R.style.AppTheme);
+        setContentView(R.layout.activity_mainpage);
     }
 
 }
