@@ -3,45 +3,32 @@ package autiboiz.collectiontestapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v4.app.DialogFragment;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 /**
@@ -151,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             // !important ADD CODE TO FOR VERIFICATION HERE!!
 //            Log.d(LOG_TAG, "Button clicked!");
-            Log.d("User is being registerd", "Sending data to Database!");
+            Log.d("User is being logged in", "Sending data to Database!");
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
@@ -230,7 +217,6 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service
                     sendPost(mEmail,  mPassword);
-            // TODO: register the new account here.
             return true;
         }
 
@@ -257,6 +243,7 @@ public class LoginActivity extends AppCompatActivity {
 //    sends login data
     public void sendPost(final String email, final String password) {
         Thread thread = new Thread(new Runnable() {
+            String response;
 
             @Override
 
@@ -284,10 +271,40 @@ public class LoginActivity extends AppCompatActivity {
                     os.flush();
                     os.close();
 
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG" , conn.getResponseMessage());
-                    Object loginDialog = new DialogPopup();
-                    ((DialogPopup) loginDialog).show(getSupportFragmentManager(), "Test");
+                    Log.i("LOGINSTS", String.valueOf(conn.getResponseCode()));
+                    Log.i("LOGINMSG" , conn.getResponseMessage());
+
+                    int responseCode=conn.getResponseCode();
+                    if (responseCode == HttpsURLConnection.HTTP_OK) {
+                        String line;
+                        BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        while ((line=br.readLine())  != null) {
+                            Log.i("LOGINBR" , line);
+
+                            response = line;
+                        }
+                    }
+
+
+
+                    if(conn.getResponseCode() != 401) {
+                        JSONObject jObject = new JSONObject(response);
+
+                        String jToken = jObject.getString("token");
+
+                        Object loginDialog = new LogInSuccesFull();
+                        ((LogInSuccesFull) loginDialog).show(getSupportFragmentManager(), "Test");
+                    }
+                    else{
+                        Object loginDialog = new LogInFailed();
+                        ((LogInFailed) loginDialog).show(getSupportFragmentManager(), "Test");
+                    }
+
+
+
+
+
+
 
                     conn.disconnect();
                 } catch (Exception e) {

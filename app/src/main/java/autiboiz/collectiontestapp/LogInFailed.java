@@ -8,16 +8,16 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
-public class DialogPopup extends DialogFragment {
+public class LogInFailed extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.dialogContents)
-                .setPositiveButton(R.string.dialogButton, new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.loginfailedtext)
+                .setPositiveButton(R.string.loginfailed, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent intent = new Intent(getActivity(), MainPage.class);
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
                     }
                 });
