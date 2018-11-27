@@ -4,7 +4,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_name">Name(register only)</string>
+    <string name="prompt_name">Name</string>
 
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -17,4 +17,6 @@
     </string>
     <string name="dialogButton">Continue</string>
     <string name="dialogContents">login succesfull!</string>
+    <string name="text_logged_in">succesfully logged in!</string>
+
 </resources>

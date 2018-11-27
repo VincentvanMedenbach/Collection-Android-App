@@ -3,6 +3,7 @@ package autiboiz.collectiontestapp;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,9 @@ public class DialogPopup extends DialogFragment {
         builder.setMessage(R.string.dialogContents)
                 .setPositiveButton(R.string.dialogButton, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+                        Intent intent = new Intent(getActivity(), MainPage.class);
+                        startActivity(intent);
                     }
                 });
 

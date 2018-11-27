@@ -3,39 +3,19 @@ package autiboiz.collectiontestapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v4.app.DialogFragment;
 
 import org.json.JSONObject;
 
@@ -47,7 +27,7 @@ import java.net.URL;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -71,19 +51,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private EditText mNameView;
     private static final String LOG_TAG =
-            LoginActivity.class.getSimpleName();
+            RegisterActivity.class.getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
+        mNameView = (EditText) findViewById(R.id.name);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -107,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin(View view) {
+    public void attemptRegister(View view) {
 
         if (mAuthTask != null) {
             return;
@@ -120,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String name = mNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -152,16 +134,13 @@ public class LoginActivity extends AppCompatActivity {
             // !important ADD CODE TO FOR VERIFICATION HERE!!
 //            Log.d(LOG_TAG, "Button clicked!");
             Log.d("User is being registerd", "Sending data to Database!");
+
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, name);
             mAuthTask.execute((Void) null);
         }
     }
 
-    public void registerPage(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-    }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -220,16 +199,19 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mEmail;
         private final String mPassword;
+        private String mName = null;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, String name) {
             mEmail = email;
             mPassword = password;
+            mName = name;
         }
+
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service
-                    sendPost(mEmail,  mPassword);
+            // TODO: attempt authentication against a network service.
+                    sendPost(mEmail, mName, mPassword);
             // TODO: register the new account here.
             return true;
         }
@@ -254,8 +236,8 @@ public class LoginActivity extends AppCompatActivity {
 //        }
     }
 
-//    sends login data
-    public void sendPost(final String email, final String password) {
+//    sends register data
+    public void sendPost(final String email, final String name, final String password) {
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -263,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Log.d("database", "Sending data to Database!");
-                    String Link = "https://game-collections.herokuapp.com/users/login";
+                    String Link = "https://game-collections.herokuapp.com/users/signup";
                     URL url = new URL(Link);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
@@ -273,6 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                     conn.setDoInput(true);
 
                     JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("userName", name);
                     jsonParam.put("userEmail", email);
                     jsonParam.put("userPassword", password);
 
@@ -286,8 +269,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                     Log.i("MSG" , conn.getResponseMessage());
-                    Object loginDialog = new DialogPopup();
-                    ((DialogPopup) loginDialog).show(getSupportFragmentManager(), "Test");
 
                     conn.disconnect();
                 } catch (Exception e) {
@@ -295,11 +276,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         thread.start();
     }
-
-
 
 }
 

@@ -50,6 +50,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionId="6"
+                    android:hint="@string/prompt_name"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -78,22 +90,13 @@
                 <Button
                     android:id="@+id/email_register_button"
                     style="?android:textAppearanceSmall"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="61dp"
                     android:layout_marginTop="16dp"
-                    android:onClick="registerPage"
+                    android:onClick="attemptRegister"
                     android:text="Register"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/email_sign_in_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="194dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:onClick="attemptLogin"
-                    android:text="Login"
-                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
