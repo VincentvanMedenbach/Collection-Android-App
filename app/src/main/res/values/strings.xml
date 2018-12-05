@@ -21,4 +21,7 @@
     <string name="loginfailed">go back</string>
     <string name="loginfailedtext">login failed!</string>
 
+
+    <string name="gameString">BarcodeNumber</string>
+
 </resources>
