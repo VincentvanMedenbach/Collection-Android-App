@@ -12,14 +12,14 @@
         android:text="Search a game" />
 
     <EditText
-        android:id="@+id/BarcodeNumber"
+        android:id="@+id/Barcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/gameString"
         android:imeActionId="6"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionUnspecified"
-        android:inputType="textPassword"
+        android:inputType="textAutoComplete"
         android:maxLines="1"
         android:singleLine="true" />
 
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="61dp"
         android:layout_marginTop="16dp"
-        android:onClick="attemptRegister"
+        android:onClick="attemptAddGame"
         android:text="Add Game"
         android:textStyle="bold" />
 </LinearLayout>

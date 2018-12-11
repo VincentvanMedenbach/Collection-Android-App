@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private static final String LOG_TAG =
             LoginActivity.class.getSimpleName();
-
+    public static String userToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,8 +197,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -216,105 +214,97 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service
-                    sendPost(mEmail,  mPassword);
+            userToken = sendPost(mEmail, mPassword);
             return true;
         }
-
-//        @Override
-//        protected void onPostExecute(final Boolean success) {
-//            mAuthTask = null;
-//            showProgress(false);
-//
-//            if (success) {
-//                finish();
-//            } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
-//            }
-//        }
-//
-//        @Override
-//        protected void onCancelled() {
-//            mAuthTask = null;
-//            showProgress(false);
-//        }
     }
 
-//    sends login data
-    public void sendPost(final String email, final String password) {
-        Thread thread = new Thread(new Runnable() {
-            String response;
+    //    sends login data
+    public String sendPost(final String email, final String password) {
 
-            @Override
+        sendData Data = new sendData();
+        Data.setData(email, password);
+        new Thread(Data).start();
+        return Data.getString();
+    }
 
-            public void run() {
-                try {
-                    Log.d("database", "Sending data to Database!");
-                    String Link = "https://game-collections.herokuapp.com/users/login";
-                    URL url = new URL(Link);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
 
-                    JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("userEmail", email);
-                    jsonParam.put("userPassword", password);
 
-                    Log.i("JSON", jsonParam.toString());
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                    os.writeBytes(jsonParam.toString());
+    public class sendData implements Runnable{
+        public String response;
+        private String email;
+        private String password;
 
-                    os.flush();
-                    os.close();
+        public void setData(final String varEmail, final String varPassword){
+            email = varEmail;
+            password = varPassword;
+        }
 
-                    Log.i("LOGINSTS", String.valueOf(conn.getResponseCode()));
-                    Log.i("LOGINMSG" , conn.getResponseMessage());
+        @Override
+        public void run() {
+            try {
+                Log.d("database", "Sending data to Database!");
+                String Link = "http://game-collections.herokuapp.com/users/login";
+                URL url = new URL(Link);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
 
-                    int responseCode=conn.getResponseCode();
-                    if (responseCode == HttpsURLConnection.HTTP_OK) {
-                        String line;
-                        BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        while ((line=br.readLine())  != null) {
-                            Log.i("LOGINBR" , line);
+                JSONObject jsonParam = new JSONObject();
+                jsonParam.put("userEmail", email);
+                jsonParam.put("userPassword", password);
 
-                            response = line;
-                        }
+                Log.i("JSON", jsonParam.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                os.writeBytes(jsonParam.toString());
+
+                os.flush();
+                os.close();
+
+                Log.i("LOGINSTS", String.valueOf(conn.getResponseCode()));
+                Log.i("LOGINMSG", conn.getResponseMessage());
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        Log.i("LOGINBR", line);
+
+                        response = line;
                     }
-
-
-
-                    if(conn.getResponseCode() != 401) {
-                        JSONObject jObject = new JSONObject(response);
-
-                        String jToken = jObject.getString("token");
-
-                        Object loginDialog = new LogInSuccesFull();
-                        ((LogInSuccesFull) loginDialog).show(getSupportFragmentManager(), "Test");
-                    }
-                    else{
-                        Object loginDialog = new LogInFailed();
-                        ((LogInFailed) loginDialog).show(getSupportFragmentManager(), "Test");
-                    }
-
-
-
-
-
-
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
 
-        thread.start();
+
+                if (conn.getResponseCode() != 401) {
+                    JSONObject jObject = new JSONObject(response);
+
+
+                    Object loginDialog = new LogInSuccesFull();
+                    ((LogInSuccesFull) loginDialog).show(getSupportFragmentManager(), "Test");
+
+
+                } else {
+                    Object loginDialog = new LogInFailed();
+                    ((LogInFailed) loginDialog).show(getSupportFragmentManager(), "Test");
+                }
+
+
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public String getString(){
+            return response;
+        }
     }
+
 
 
 

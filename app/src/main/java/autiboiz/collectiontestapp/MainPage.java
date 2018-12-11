@@ -3,6 +3,7 @@ package autiboiz.collectiontestapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 public class MainPage extends AppCompatActivity {
     @Override
@@ -12,7 +13,7 @@ public class MainPage extends AppCompatActivity {
         setContentView(R.layout.activity_mainpage);
     }
 
-    public void addPage(){
+    public void addPage(View view){
         Intent intent = new Intent(this, Add.class);
         startActivity(intent);
     }
