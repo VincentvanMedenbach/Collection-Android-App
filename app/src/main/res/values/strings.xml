@@ -20,7 +20,7 @@
     <string name="text_logged_in">succesfully logged in!</string>
     <string name="loginfailed">go back</string>
     <string name="loginfailedtext">login failed!</string>
-
+    <string name="scanButton">Scan</string>
 
     <string name="gameString">BarcodeNumber</string>
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editText"
@@ -11,17 +12,30 @@
         android:inputType="textPersonName"
         android:text="Search a game" />
 
-    <EditText
-        android:id="@+id/Barcode"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/gameString"
-        android:imeActionId="6"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionUnspecified"
-        android:inputType="textAutoComplete"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/Barcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/gameString"
+            android:imeActionId="6"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textAutoComplete"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/scanButton"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:onClick="handleScan"
+            android:text="@string/scanButton" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/add_game_button"
@@ -32,4 +46,5 @@
         android:onClick="attemptAddGame"
         android:text="Add Game"
         android:textStyle="bold" />
+
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import org.json.JSONObject;
@@ -162,4 +161,23 @@ public class Add extends AppCompatActivity {
 
         thread.start();
     }
+
+//    public void handleScan(View view){
+//
+//    }
+//
+//    public int scanBarCode(Drawable image){
+//        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+//                image);
+//        BarcodeDetector detector =
+//                new BarcodeDetector.Builder(getApplicationContext())
+//                        .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+//                        .build();
+//        Frame frame = new Frame.Builder().setBitmap(image).build();
+//        SparseArray<Barcode> barcodes = detector.detect(frame);
+//
+//        Barcode thisCode = barcodes.valueAt(0);
+//        txtView.setText(thisCode.rawValue);
+//        return
+//    }
 }
